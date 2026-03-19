@@ -164,27 +164,3 @@
   </div>
 </body>
 </html>
-```
-
----
-
-**Why this page is good for interviews:**
-
-When you demo this to an interviewer:
-- The **Instance ID** changes on refresh — proves ALB is load balancing across instances
-- The **Availability Zone** switches between `us-east-1a` and `us-east-1b` — proves multi-AZ is working
-- The **pulsing green dot** shows the instance is healthy
-
-One page, proves everything on your resume.
-
----
-
-Your structure now:
-```
-app/
-  index.html   ✅
-modules/
-  vpc/         ✅
-  sg/          ✅
-  alb/         ✅
-  asg/         ✅
