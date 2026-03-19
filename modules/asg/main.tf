@@ -54,28 +54,13 @@ resource "aws_launch_template" "main" {
   # Installs Nginx, pulls index.html from S3, serves it
   user_data = base64encode(<<-EOF
     #!/bin/bash
-    set -e
-
-    # Update packages
-    sudo apt update -y
-
-    # Install Nginx and AWS CLI
-    sudo apt install -y nginx aws-cli
-
-    # Pull app files from S3
-    sudo aws s3 cp s3://${var.s3_bucket_name}/index.html /usr/share/nginx/html/index.html
-
-    # Get instance metadata for display
-    INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-    AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-
-    # Inject instance info into the page
-    sudo sed -i "s/INSTANCE_ID/$INSTANCE_ID/g" /usr/share/nginx/html/index.html
-    sudo sed -i "s/AVAILABILITY_ZONE/$AZ/g" /usr/share/nginx/html/index.html
-
-    # Start and enable Nginx
-    sudo systemctl start nginx
-    sudo systemctl enable nginx
+  sudo aws s3 cp s3://${var.s3_bucket_name}/index.html /usr/share/nginx/html/index.html
+  INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+  AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+  sudo sed -i "s/INSTANCE_ID/$INSTANCE_ID/g" /usr/share/nginx/html/index.html
+  sudo sed -i "s/AVAILABILITY_ZONE/$AZ/g" /usr/share/nginx/html/index.html
+  sudo systemctl restart nginx
+  sudo systemctl enable nginx
   EOF
   )
 
