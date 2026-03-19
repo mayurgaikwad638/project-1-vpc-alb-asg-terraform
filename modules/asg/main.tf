@@ -57,25 +57,25 @@ resource "aws_launch_template" "main" {
     set -e
 
     # Update packages
-    yum update -y
+    sudo apt update -y
 
     # Install Nginx and AWS CLI
-    yum install -y nginx aws-cli
+    sudo apt install -y nginx aws-cli
 
     # Pull app files from S3
-    aws s3 cp s3://${var.s3_bucket_name}/index.html /usr/share/nginx/html/index.html
+    sudo aws s3 cp s3://${var.s3_bucket_name}/index.html /usr/share/nginx/html/index.html
 
     # Get instance metadata for display
     INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
     AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
 
     # Inject instance info into the page
-    sed -i "s/INSTANCE_ID/$INSTANCE_ID/g" /usr/share/nginx/html/index.html
-    sed -i "s/AVAILABILITY_ZONE/$AZ/g" /usr/share/nginx/html/index.html
+    sudo sed -i "s/INSTANCE_ID/$INSTANCE_ID/g" /usr/share/nginx/html/index.html
+    sudo sed -i "s/AVAILABILITY_ZONE/$AZ/g" /usr/share/nginx/html/index.html
 
     # Start and enable Nginx
-    systemctl start nginx
-    systemctl enable nginx
+    sudo systemctl start nginx
+    sudo systemctl enable nginx
   EOF
   )
 
