@@ -22,33 +22,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "aws_s3_bucket" "app" {
-  bucket = "${var.project_name}-app-files"
-  tags = {Name = "${var.project_name}-app-files"}
-}
 
-resource "aws_s3_bucket_versioning" "app" {
-  bucket = aws_s3_bucket.app.id
-  versioning_configuration {
-    status = enable
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "app" {
-  bucket                  = aws_s3_bucket.app.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_object" "index" {
-  bucket       = aws_s3_bucket.app.id
-  key          = "index.html"
-  source       = "${path.module}/app/index.html"
-  content_type = "text/html"
-  etag         = filemd5("${path.module}/app/index.html")
-}
 
 module "vpc" {
   source = "./modules/vpc"
@@ -81,7 +55,7 @@ module "asg" {
   source = "./modules/asg"
 
   project_name = var.project_name
-  s3_bucket_name = aws_s3_bucket.app.bucket
+  s3_bucket_name = "mayur-ha-infra-app-files"
   ec2_sg_id = module.sg.ec2_sg_id
   key_name = var.key_name
   private_subnet_ids = module.vpc.private_subnets_ids

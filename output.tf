@@ -8,11 +8,6 @@ output "bastion_public_ip" {
   value       = module.asg.bastion_public_ip
 }
 
-output "app_s3_bucket" {
-  description = "S3 bucket storing app files"
-  value       = aws_s3_bucket.app.bucket
-}
-
 output "asg_name" {
   description = "Name of the Auto Scaling Group"
   value       = module.asg.asg_name
