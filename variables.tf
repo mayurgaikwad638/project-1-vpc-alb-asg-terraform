@@ -49,11 +49,6 @@ variable "key_name" {
   type        = string
 }
 
-variable "my_ip" {
-  description = "Your public IP for bastion SSH access"
-  type        = string
-}
-
 variable "desired_capacity" {
   description = "Desired number of EC2 instances"
   type        = number
